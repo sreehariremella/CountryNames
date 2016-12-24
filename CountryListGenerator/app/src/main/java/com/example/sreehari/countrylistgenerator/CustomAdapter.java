@@ -65,7 +65,7 @@ public class CustomAdapter extends BaseAdapter {
         if (view == null) {
             LayoutInflater inflater = context.getLayoutInflater();
             view = inflater.inflate(R.layout.listlayout, null, true);
-        }
+       }
         ((TextView) view.findViewById(R.id.tv_capital)).setText(countries.get(i).getCapital());
         ((TextView) view.findViewById(R.id.tv_country)).setText(countries.get(i).getName());
         view.setOnClickListener(listener);
