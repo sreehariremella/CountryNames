@@ -32,6 +32,8 @@ public class MainActivity extends AppCompatActivity{
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         rv.setLayoutManager(llm);
         rv.setItemAnimator(new DefaultItemAnimator());
+        Thread t=Thread.currentThread();
+        Log.v("Thread","Thread In "+getLocalClassName()+" with name "+t.getName());
     }
 
     @Override
@@ -45,6 +47,8 @@ public class MainActivity extends AppCompatActivity{
                 }
             }
         });
+        Thread t=Thread.currentThread();
+        Log.v("Thread","Thread In "+getLocalClassName()+" with name "+t.getName());
     }
 
     private class GetCountries extends AsyncTask<Void, Void, Void> {
@@ -57,6 +61,8 @@ public class MainActivity extends AppCompatActivity{
             pDialog.setMessage("Please wait...");
             pDialog.setCancelable(false);
             pDialog.show();
+            Thread t=Thread.currentThread();
+            Log.v("Thread","Thread In "+getLocalClassName()+" with name "+t.getName());
 
         }
 
@@ -91,7 +97,8 @@ public class MainActivity extends AppCompatActivity{
                 });
 
             }
-
+            Thread t=Thread.currentThread();
+            Log.v("Thread","Thread In "+getLocalClassName()+" with name "+t.getName());
             return null;
         }
 
@@ -102,6 +109,8 @@ public class MainActivity extends AppCompatActivity{
             if (pDialog.isShowing())
                 pDialog.dismiss();
             rv.setAdapter(new RecyclerAdapter(list,R.layout.reclayoutcountry,getApplicationContext()));
+            Thread t=Thread.currentThread();
+            Log.v("Thread","Thread In "+getLocalClassName()+" with name "+t.getName());
         }
 
     }
