@@ -42,13 +42,20 @@ public class MainActivity extends AppCompatActivity{
         ((Button)findViewById(R.id.bt_generate)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(list==null){
-                    new GetCountries().execute();
-                }
+                Log.v("Thread",String.valueOf(Thread.activeCount()));
+GenerateOnThread();
+                Log.v("Thread",String.valueOf(Thread.activeCount()));
+            }
+        });
+        ((Button)findViewById(R.id.bt_get)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MainActivity.this,String.valueOf(Thread.activeCount()),Toast.LENGTH_SHORT).show();
             }
         });
         Thread t=Thread.currentThread();
         Log.v("Thread","Thread In "+getLocalClassName()+" with name "+t.getName());
+
     }
 
     private class GetCountries extends AsyncTask<Void, Void, Void> {
@@ -114,5 +121,49 @@ public class MainActivity extends AppCompatActivity{
         }
 
     }
+    private void GenerateOnThread(){
+        if(list==null){
+            Thread t=new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    HttpHandler sh = new HttpHandler();
+                    String jsonStr = sh.makeServiceCall(url);
+                    if (jsonStr != null) {
+                        try {
 
+                            Gson gson = new Gson();
+                            Type listOfCountryObject = new TypeToken<List<Country>>(){}.getType();
+                            final List<Country> networklist=gson.fromJson(jsonStr, listOfCountryObject);
+                            if(networklist != null) {
+                                Log.d("TAG", "" + networklist.size());
+                                rv.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        rv.setAdapter(new RecyclerAdapter(networklist,R.layout.reclayoutcountry,getApplicationContext()));
+
+                                    }
+                                });
+                            }
+
+
+                        } catch ( Exception e) {
+                            Log.d("TAG", "" + e.toString());
+                        }
+                    } else {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(),
+                                        "Couldn't get json from server. Check LogCat for possible errors!",
+                                        Toast.LENGTH_LONG)
+                                        .show();
+                            }
+                        });
+
+                    }
+                }
+            });
+            t.start();
+        }
+    }
 }
