@@ -1,0 +1,1 @@
+Application to generate the country list using global api
